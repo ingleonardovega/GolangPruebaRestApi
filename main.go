@@ -1,14 +1,23 @@
 package main
 
 import (
-	"GolangPruebaRestApi/database"
-	"fmt"
+	"net/http"
 
+	"github.com/GolangPruebaRestApi/database"
+	"github.com/GolangPruebaRestApi/product"
+	"github.com/go-chi/chi"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
 	databaseConnection := database.InitDB()
 	defer databaseConnection.Close()
-	fmt.Println(databaseConnection)
+
+	var productRepository = product.NewRepository(databaseConnection)
+	var productService product.Service
+	productService = product.NewService(productRepository)
+	r := chi.NewRouter()
+	r.Mount("/products", product.MakeHttpHandler(productService))
+	http.ListenAndServe(":3000", r)
+
 }
