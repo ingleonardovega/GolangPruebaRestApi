@@ -5,6 +5,7 @@ import "github.com/GolangPruebaRestApi/helper"
 type Service interface {
 	GetEmployees(params *getEmployeesRequest) (*EmployeeList, error)
 	GetEmployeeById(param *getEmployeeByIDRequest) (*Employee, error)
+	GetBestEmployee() (*BestEmployee, error)
 	//GetTotalEmployees() (int64, error)
 }
 
@@ -30,4 +31,8 @@ func (s *service) GetEmployees(params *getEmployeesRequest) (*EmployeeList, erro
 
 func (s *service) GetEmployeeById(param *getEmployeeByIDRequest) (*Employee, error) {
 	return s.repo.GetEmployeeById(param)
+}
+
+func (s *service) GetBestEmployee() (*BestEmployee, error) {
+	return s.repo.GetBestEmployee()
 }
