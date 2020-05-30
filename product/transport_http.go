@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/GolangPruebaRestApi/helper"
 	"github.com/go-chi/chi"
 	kithttp "github.com/go-kit/kit/transport/http"
 )
@@ -28,6 +29,17 @@ func MakeHttpHandler(s Service) http.Handler {
 		addProductRequestDecoder, kithttp.EncodeJSONResponse)
 	r.Method(http.MethodPost, "/", addProductHandler)
 
+	updateProductHandler := kithttp.NewServer(makeUpdateProductEndPoint(s),
+		updateProductRequestDecoder, kithttp.EncodeJSONResponse)
+	r.Method(http.MethodPut, "/", updateProductHandler)
+
+	deleteProductHandler := kithttp.NewServer(makeDeleteProductEndPoint(s),
+		getDeleteRequestDecoder, kithttp.EncodeJSONResponse)
+	r.Method(http.MethodDelete, "/{id}", deleteProductHandler)
+
+	getBestSellersHandler := kithttp.NewServer(makeBestSellerEndpoint(s),
+		getBestSellerRecuestDecoder, kithttp.EncodeJSONResponse)
+	r.Method(http.MethodGet, "/bestsellers", getBestSellersHandler)
 	return r
 }
 
@@ -41,9 +53,7 @@ func getProductByIdRequestDecoder(context context.Context, r *http.Request) (int
 func getProductsRequestDecoder(contex context.Context, r *http.Request) (interface{}, error) {
 	request := getProductsRequest{}
 	err := json.NewDecoder(r.Body).Decode(&request)
-	if err != nil {
-		panic(err)
-	}
+	helper.Catch(err)
 	return request, nil
 
 }
@@ -51,8 +61,22 @@ func getProductsRequestDecoder(contex context.Context, r *http.Request) (interfa
 func addProductRequestDecoder(_ context.Context, r *http.Request) (interface{}, error) {
 	request := getAddProductRequest{}
 	err := json.NewDecoder(r.Body).Decode(&request)
-	if err != nil {
-		panic(err)
-	}
+	helper.Catch(err)
 	return request, nil
+}
+
+func updateProductRequestDecoder(_ context.Context, r *http.Request) (interface{}, error) {
+	request := updateProductRequest{}
+	err := json.NewDecoder(r.Body).Decode(&request)
+	helper.Catch(err)
+	return request, nil
+}
+func getDeleteRequestDecoder(context context.Context, r *http.Request) (interface{}, error) {
+	return deleteProductRequest{
+		ProductID: chi.URLParam(r, "id"),
+	}, nil
+}
+
+func getBestSellerRecuestDecoder(context context.Context, r *http.Request) (interface{}, error) {
+	return getBestSellersRequest{}, nil
 }
