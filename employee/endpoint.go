@@ -45,6 +45,10 @@ type updateEmployeeRequest struct {
 	MobilePhone   string
 }
 
+type deleteEmployeeRequest struct {
+	EmployeeID string
+}
+
 func makeGetEmployeesEndpoint(s Service) endpoint.Endpoint {
 	getEmployeesEndpoint := func(ctx context.Context, request interface{}) (response interface{}, err error) {
 		req := request.(getEmployeesRequest)
@@ -66,7 +70,7 @@ func makeEmployeeByIDEndpoint(s Service) endpoint.Endpoint {
 }
 
 func makeGetBestEmployeeEndpoint(s Service) endpoint.Endpoint {
-	getBestEmployeeEndpoint := func(ct_ context.Context, request interface{}) (response interface{}, err error) {
+	getBestEmployeeEndpoint := func(_ context.Context, request interface{}) (response interface{}, err error) {
 		result, err := s.GetBestEmployee()
 		helper.Catch(err)
 		return result, nil
@@ -84,6 +88,7 @@ func makeInsertEmployeeEndpoint(s Service) endpoint.Endpoint {
 	}
 	return getEmployeeEndpoint
 }
+
 func makeUpadateEmployeeEndpoint(s Service) endpoint.Endpoint {
 	getUpdateEmployeeEndpoint := func(_ context.Context, request interface{}) (response interface{}, err error) {
 		req := request.(updateEmployeeRequest)
@@ -92,4 +97,14 @@ func makeUpadateEmployeeEndpoint(s Service) endpoint.Endpoint {
 		return result, nil
 	}
 	return getUpdateEmployeeEndpoint
+}
+
+func makeDeleteEmployeeEndpoint(s Service) endpoint.Endpoint {
+	getDeleteEmployeeEndpoint := func(_ context.Context, request interface{}) (response interface{}, err error) {
+		req := request.(deleteEmployeeRequest)
+		result, err := s.DeleteEmployee(&req)
+		helper.Catch(err)
+		return result, nil
+	}
+	return getDeleteEmployeeEndpoint
 }
