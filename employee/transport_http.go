@@ -30,6 +30,10 @@ func MakeHttpHandler(s Service) http.Handler {
 		getAddEmployeeRequestDecoder, kithttp.EncodeJSONResponse)
 	r.Method(http.MethodPost, "/", addEmployeeHandler)
 
+	updateEmployeeHandler := kithttp.NewServer(makeUpadateEmployeeEndpoint(s),
+		getUpdateEmployeeRequestDecoder, kithttp.EncodeJSONResponse)
+	r.Method(http.MethodPut, "/", updateEmployeeHandler)
+
 	return r
 }
 
@@ -52,6 +56,12 @@ func getBestEmployeeRequestDecoder(_ context.Context, r *http.Request) (interfac
 
 func getAddEmployeeRequestDecoder(_ context.Context, r *http.Request) (interface{}, error) {
 	request := addEmployeeRequest{}
+	err := json.NewDecoder(r.Body).Decode(&request)
+	helper.Catch(err)
+	return request, nil
+}
+func getUpdateEmployeeRequestDecoder(_ context.Context, r *http.Request) (interface{}, error) {
+	request := updateEmployeeRequest{}
 	err := json.NewDecoder(r.Body).Decode(&request)
 	helper.Catch(err)
 	return request, nil
