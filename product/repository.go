@@ -34,7 +34,7 @@ func (repo *repository) GetProductById(productId int) (*Product, error) {
 	product := &Product{}
 
 	err := row.Scan(&product.Id, &product.ProductCode, &product.ProductName, &product.Description,
-		&product.StandarCost, &product.ListPrice, &product.Category)
+		&product.StandardCost, &product.ListPrice, &product.Category)
 	helper.Catch(err)
 	return product, err
 }
@@ -51,7 +51,7 @@ func (repo *repository) GetProducts(params *getProductsRequest) ([]*Product, err
 	for results.Next() {
 		product := &Product{}
 		err = results.Scan(&product.Id, &product.ProductCode, &product.ProductName, &product.Description,
-			&product.StandarCost, &product.ListPrice, &product.Category)
+			&product.StandardCost, &product.ListPrice, &product.Category)
 		helper.Catch(err)
 		products = append(products, product)
 	}
