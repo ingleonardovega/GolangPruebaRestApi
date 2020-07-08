@@ -56,7 +56,6 @@ type deleteEmployeeRequest struct {
 // @Param request body employee.getEmployeesRequest true "User Data"
 // @Success 200 {object} employee.EmployeeList "ok"
 // @Router /employees/paginated [post]
-
 func makeGetEmployeesEndpoint(s Service) endpoint.Endpoint {
 	getEmployeesEndpoint := func(ctx context.Context, request interface{}) (response interface{}, err error) {
 		req := request.(getEmployeesRequest)

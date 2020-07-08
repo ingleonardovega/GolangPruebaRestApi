@@ -148,6 +148,39 @@ var doc = `{
                 }
             }
         },
+        "/employees/paginated": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Lista de Empleados",
+                "parameters": [
+                    {
+                        "description": "User Data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/employee.getEmployeesRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "$ref": "#/definitions/employee.EmployeeList"
+                        }
+                    }
+                }
+            }
+        },
         "/employees/{id}": {
             "get": {
                 "consumes": [
@@ -625,6 +658,20 @@ var doc = `{
                 }
             }
         },
+        "employee.EmployeeList": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/employee.Employee"
+                    }
+                },
+                "totalRecords": {
+                    "type": "integer"
+                }
+            }
+        },
         "employee.addEmployeeRequest": {
             "type": "object",
             "properties": {
@@ -657,6 +704,17 @@ var doc = `{
                 },
                 "mobilePhone": {
                     "type": "string"
+                }
+            }
+        },
+        "employee.getEmployeesRequest": {
+            "type": "object",
+            "properties": {
+                "limit": {
+                    "type": "integer"
+                },
+                "offset": {
+                    "type": "integer"
                 }
             }
         },
@@ -854,7 +912,7 @@ var doc = `{
                 "ProductName": {
                     "type": "string"
                 },
-                "StandarCost": {
+                "StandardCost": {
                     "type": "number"
                 },
                 "id": {

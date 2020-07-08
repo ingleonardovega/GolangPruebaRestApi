@@ -68,6 +68,15 @@ definitions:
       mobilePhone:
         type: string
     type: object
+  employee.EmployeeList:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/employee.Employee'
+        type: array
+      totalRecords:
+        type: integer
+    type: object
   employee.addEmployeeRequest:
     properties:
       address:
@@ -90,6 +99,13 @@ definitions:
         type: string
       mobilePhone:
         type: string
+    type: object
+  employee.getEmployeesRequest:
+    properties:
+      limit:
+        type: integer
+      offset:
+        type: integer
     type: object
   employee.updateEmployeeRequest:
     properties:
@@ -218,7 +234,7 @@ definitions:
         type: string
       ProductName:
         type: string
-      StandarCost:
+      StandardCost:
         type: number
       id:
         type: integer
@@ -412,6 +428,27 @@ paths:
           schema:
             $ref: '#/definitions/employee.BestEmployee'
       summary: Mejor Empleado
+      tags:
+      - Employee
+  /employees/paginated:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: User Data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/employee.getEmployeesRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/employee.EmployeeList'
+      summary: Lista de Empleados
       tags:
       - Employee
   /orders/:
